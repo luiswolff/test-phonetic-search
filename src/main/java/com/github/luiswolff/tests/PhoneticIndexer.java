@@ -9,15 +9,11 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import org.apache.commons.codec.language.ColognePhonetic;
-import org.apache.commons.codec.language.Metaphone;
-import org.apache.commons.codec.language.Soundex;
-
 public class PhoneticIndexer {
 
-    private final Encoder encoder;
+    private final PhoneticEncoder encoder;
 
-    public PhoneticIndexer(Encoder encoder) {
+    public PhoneticIndexer(PhoneticEncoder encoder) {
         this.encoder = encoder;
     }
 
@@ -38,34 +34,6 @@ public class PhoneticIndexer {
                 source = arg.split("=", 2)[1];
             }
         }
-        new PhoneticIndexer(Encoder.valueOf(encoding)).index(new File(source)).entrySet().forEach(System.out::println); // NOSONAR
-    }
-
-    public enum Encoder {
-
-        SOUNDEX {
-
-            @Override
-            String encode(String value) {
-                return Soundex.US_ENGLISH.soundex(value);
-            }
-
-        },
-        COLOGNE_PHONETIC {
-
-            @Override
-            String encode(String value) {
-                return new ColognePhonetic().colognePhonetic(value);
-            }
-        },
-        METAPHONE {
-
-            @Override
-            String encode(String value) {
-                return new Metaphone().metaphone(value);
-            }
-        };
-
-        abstract String encode(String value);
+        new PhoneticIndexer(PhoneticEncoder.valueOf(encoding)).index(new File(source)).entrySet().forEach(System.out::println); // NOSONAR
     }
 }
