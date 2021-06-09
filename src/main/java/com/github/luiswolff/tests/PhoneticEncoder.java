@@ -1,5 +1,7 @@
 package com.github.luiswolff.tests;
 
+import java.util.regex.Pattern;
+
 import org.apache.commons.codec.language.ColognePhonetic;
 import org.apache.commons.codec.language.Metaphone;
 import org.apache.commons.codec.language.Soundex;
@@ -10,7 +12,11 @@ public enum PhoneticEncoder {
 
         @Override
         String encode(String value) {
-            return Soundex.US_ENGLISH.soundex(value);
+            try {
+                return Soundex.US_ENGLISH.soundex(value);
+            } catch (IllegalArgumentException e) {
+                return "unsupported";
+            }
         }
 
     },
