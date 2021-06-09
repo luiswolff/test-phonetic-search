@@ -15,7 +15,7 @@ public enum PhoneticEncoder {
             try {
                 return Soundex.US_ENGLISH.soundex(value);
             } catch (IllegalArgumentException e) {
-                return "unsupported";
+                return "0000"; // unsupported
             }
         }
 
