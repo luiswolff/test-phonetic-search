@@ -1,7 +1,5 @@
 package com.github.luiswolff.tests;
 
-import java.util.regex.Pattern;
-
 import org.apache.commons.codec.language.ColognePhonetic;
 import org.apache.commons.codec.language.Metaphone;
 import org.apache.commons.codec.language.Soundex;
