@@ -1,9 +1,12 @@
 package com.github.luiswolff.tests;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -17,15 +20,13 @@ public class PhoneticIndexer {
         this.encoder = encoder;
     }
 
-    public Map<String, List<String>> index(File source) throws IOException {
-        try (BufferedReader in = new BufferedReader(new FileReader(source))) {
-            return in.lines().collect(Collectors.groupingBy(encoder::encode, TreeMap::new, Collectors.toList()));
-        }
+    public Map<String, List<String>> index(Collection<String> source) {
+        return source.stream().filter(s -> !s.isEmpty()).collect(Collectors.groupingBy(encoder::encode, TreeMap::new, Collectors.toList()));
     }
 
     public static void main(String[] args) throws IOException {
         String encoding = "SOUNDEX";
-        String source = "data/lastnames.txt";
+        String source = null;
 
         for (String arg : args) {
             if (arg.toUpperCase().startsWith("ENCODING=")) {
@@ -34,6 +35,24 @@ public class PhoneticIndexer {
                 source = arg.split("=", 2)[1];
             }
         }
-        new PhoneticIndexer(PhoneticEncoder.valueOf(encoding)).index(new File(source)).entrySet().forEach(System.out::println); // NOSONAR
+        List<String> data = new LinkedList<>();
+        if (source != null) {
+            try (BufferedReader in = new BufferedReader(new FileReader(source))) {
+                in.lines().forEach(data::add);
+            }
+        } else {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(System.in))) {
+                while (true) {
+                    System.out.print("Type value (leave empty to see result): "); // NOSONAR
+                    String line;
+                    if ((line = in.readLine()) != null && !line.isEmpty()) {
+                        data.add(line);
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+        new PhoneticIndexer(PhoneticEncoder.valueOf(encoding)).index(Collections.unmodifiableList(data)).entrySet().forEach(System.out::println); // NOSONAR
     }
 }

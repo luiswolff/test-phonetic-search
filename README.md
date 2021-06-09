@@ -1,13 +1,13 @@
 # test phonetic search (Java)
 
-This project generates indexes by a phonetic code of the lines of an input file.
-By default the soundex hashes of the lines in the file `data/lastnames.txt` are generated.
+This project provides same utility function for working with phonetic hashes.
 
 ## Usage
 
 Run the following classes with you preferred IDE:
 
 * `com.github.luiswolff.tests.PhoneticIndexer.java`
+* `com.github.luiswolff.tests.PhoneticHashGenerator.java`
 
 You can also submit one of the following optional command line arguments:
 
